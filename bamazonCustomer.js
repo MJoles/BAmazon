@@ -61,18 +61,28 @@ function pickProduct() {
             var queryProducts = "SELECT * FROM products WHERE ?";
             connection.query(queryProducts, {item_id: product}, function(err, res) {
                 if (err) throw err;
+                
                  else {
                     var productInfo = res[0];
                     if (quantity <= productInfo.stock_quantity) {
                         console.log("The product you want is in stock!")
+                    };
+            var queryUpdate = "UPDATE products SET ? WHERE ?"
+            connection.query(queryUpdate, [{stock_quantity: answer.quantity},{item_id: product}], function(err, res) {
+                 if (err) throw err;
+                 else  {   
+                                              
+                          console.log("Products have been updated!")
+                      }
+            })
                     }
 
-                }
+                
             })
+
+        
         })
     
 };
 
-function checkProduct() {
-    var query = connection.query("SELECT")
-}
+
