@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("Welcome to BAmazon! Take a look at our products for sale below!");
+    console.log("\nWelcome to BAmazon! Take a look at our products for sale below!\n");
    
     allProducts();
 });
@@ -53,28 +53,41 @@ function pickProduct() {
         }
         ])
         .then(function(answer) {
-            console.log("Your order has been placed!");
-            console.log(answer);
+            
+            
             var product = answer.product;
             var quantity = answer.quantity;
             
             var queryProducts = "SELECT * FROM products WHERE ?";
+            var cost 
             connection.query(queryProducts, {item_id: product}, function(err, res) {
                 if (err) throw err;
                 
                  else {
                     var productInfo = res[0];
                     if (quantity <= productInfo.stock_quantity) {
-                        console.log("The product you want is in stock!")
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        console.log("We have " + productInfo.stock_quantity + " " + productInfo.product_name + "s in stock for your order!")
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); 
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        console.log("Thank you for your order! Please wait while we process your order!");
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); 
                     };
+                    if (cost = quantity * productInfo.price) {
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        console.log("The total cost of your order is $" + cost + ".00");
+                        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); 
+                    }
             var queryUpdate = "UPDATE products SET ? WHERE ?"
             connection.query(queryUpdate, [{stock_quantity: answer.quantity},{item_id: product}], function(err, res) {
                  if (err) throw err;
                  else  {   
-                                              
-                          console.log("Products have been updated!")
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");  
+                    console.log("Inventory has been updated!");
+                    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); 
+                        allProducts();
                       }
-            })
+                })
                     }
 
                 
